@@ -15,5 +15,20 @@ class Piece:
             print()
 
 
-piece = Piece((12, 2), fill_all=True)
-piece.output_matrix()
+piece_list = [
+    Piece((2, 2), [(0, 0), (0, 1), (1, 0)]),
+    Piece((12, 2), fill_all=True),
+    Piece((2, 12), fill_all=True),
+    Piece((2, 6), fill_all=True),
+    Piece((6, 2), fill_all=True),
+    Piece((1, 1), fill_all=True),
+    Piece((1, 2), fill_all=True),
+    Piece((2, 1), fill_all=True),
+    Piece((1, 8), fill_all=True),
+    Piece((8, 1), fill_all=True)
+]
+
+for piece in piece_list:
+    piece.output_matrix()
+    print()
+
