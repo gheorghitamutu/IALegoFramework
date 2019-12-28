@@ -1,12 +1,16 @@
+CELL_EMPTY = 0
+CELL_FULL = 1
+
+
 class Piece:
     def __init__(self, size, filled_cells=None, fill_all=False):
         self.n = size[0]
         self.m = size[1]
-        self.matrix = [[1 if fill_all else 0] * self.n for _ in range(self.m)]
+        self.matrix = [[CELL_FULL if fill_all else CELL_EMPTY] * self.n for _ in range(self.m)]
 
         if fill_all is False and filled_cells is not None:
             for i in filled_cells:
-                self.matrix[i[0]][i[1]] = 1
+                self.matrix[i[0]][i[1]] = CELL_FULL
 
     def output_matrix(self):
         for i in self.matrix:
@@ -27,7 +31,7 @@ piece_list = [
     Piece((1, 8), fill_all=True),
     Piece((8, 1), fill_all=True),
 
-    Piece((3, 3), [(0, 0), (0, 1), (1, 0),(2, 0),(1, 1),(2, 1), (2,2)]),
+    Piece((3, 3), [(0, 0), (0, 1), (1, 0), (2, 0), (1, 1), (2, 1), (2, 2)]),
     Piece((2, 2), [(0, 0), (0, 1), (1, 1)]),
     Piece((3, 3), [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (2, 2)]),
     Piece((3, 3), [(0, 0), (0, 1), (1, 0), (1, 1), (0, 2), (1, 2), (2, 2)]),
