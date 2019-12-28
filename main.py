@@ -25,7 +25,18 @@ piece_list = [
     Piece((1, 2), fill_all=True),
     Piece((2, 1), fill_all=True),
     Piece((1, 8), fill_all=True),
-    Piece((8, 1), fill_all=True)
+    Piece((8, 1), fill_all=True),
+
+    Piece((3, 3), [(0, 0), (0, 1), (1, 0),(2, 0),(1, 1),(2, 1), (2,2)]),
+    Piece((2, 2), [(0, 0), (0, 1), (1, 1)]),
+    Piece((3, 3), [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1), (2, 2)]),
+    Piece((3, 3), [(0, 0), (0, 1), (1, 0), (1, 1), (0, 2), (1, 2), (2, 2)]),
+    Piece((3, 4), fill_all=True),
+    Piece((3, 1), fill_all=True),
+    Piece((1, 3), fill_all=True),
+    Piece((4, 3), fill_all=True),
+    Piece((2, 2), fill_all=True),
+    Piece((5, 2), fill_all=True)
 ]
 
 for piece in piece_list:
