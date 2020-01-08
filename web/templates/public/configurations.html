@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ super() }}
+{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row row-cols-1 row-cols-md-1">
+    <div class="col mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Configuration List</h5>
+                <p class="card-text">All Configurations available.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-4">
+        <div id="list-example" class="list-group text-center">
+            {% for configuration in configurations %}
+                <a class="list-group-item list-group-item-action" href="{{ 'configurations\\' + configuration }}">{{ configuration }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
