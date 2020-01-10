@@ -1,3 +1,16 @@
 body {
-    padding: 10% 30%;
+    padding: 10% 25%;
+}
+
+.cell {
+    border: 1px solid #6c757d;
+    border-radius: 4px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 1em;
+    cursor: pointer;
+}
+
+.cell_selected {
+    background-color: #ffc107;
 }

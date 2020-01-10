@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ super() }}
+{% endblock %}
+{% block head %}
+  {{ super() }}
+   <script src="{{ url_for('static', filename='js/grid.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row row-cols-1 row-cols-md-1">
+  <div class="col mb-4">
+
+      <div class="card text-center">
+          <div class="card-body">
+              <h5 class="card-title">Add Piece</h5>
+              <p class="card-text">Select name, size and filled cells of the piece</p>
+          </div>
+      </div>
+
+      <br>
+<form action="{{ url_for('add_piece') }}" method="post" id="add_piece_form">
+      <div class="row">
+          <div class="col-md-6">
+              <div class="card text-center">
+                  <div class="card-body">
+                          <div class="form-group row">
+                              <label for="piece-width-input" class="col-4 col-form-label">Width</label>
+                              <div class="col-4">
+                                  <input class="form-control" type="number" value="1" id="piece-width-input">
+                              </div>
+                          </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-md-6">
+              <div class="card text-center">
+                  <div class="card-body">
+                          <div class="form-group row">
+                              <label for="piece-height-input" class="col-4 col-form-label">Height</label>
+                              <div class="col-4">
+                                  <input class="form-control" type="number" value="1" id="piece-height-input">
+                              </div>
+                          </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <br>
+      <div class="row">
+           <div class="col-md-12">
+               <div class="card text-center">
+                   <div class="card-body">
+                           <div class="grid" id="grid_add_piece">
+
+                           </div>
+                   </div>
+               </div>
+           </div>
+      </div>
+
+      <br>
+
+      <div class="input-group">
+          <input type="text" class="form-control" placeholder="Piece's name" aria-label="Piece's name" aria-describedby="basic-addon2" id="piece-name">
+              <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="button" id="add_piece_button">Add</button>
+              </div>
+      </div>
+</form>
+  </div>
+</div>
+
+{% endblock %}

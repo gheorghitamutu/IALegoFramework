@@ -4,6 +4,7 @@ import os
 import uuid
 import time
 from cube import Cube
+import json
 
 CELL_EMPTY = 0
 CELL_FULL = 1
@@ -17,7 +18,16 @@ class Piece:
     except OSError:
         print("Creation of the directory {} failed!".format(plotly_directory_pieces))
 
-    def __init__(self, size, filled_cells=None, fill_all=False, name=None):
+    serialize_folder = r'{}\user_made'.format(plotly_directory_pieces)
+    try:
+        if os.path.exists(serialize_folder) is False:
+            os.mkdir(serialize_folder)
+    except OSError:
+        print("Creation of the directory {} failed!".format(serialize_folder))
+
+    def __init__(self, size, filled_cells=None, fill_all=False, name=None, user_made=False):
+        self.user_made = user_made
+
         self.n = size[0]
         self.m = size[1]
         self.matrix = [[CELL_FULL if fill_all else CELL_EMPTY] * self.n for _ in range(self.m)]
@@ -33,7 +43,10 @@ class Piece:
 
         if fill_all is False and filled_cells is not None:
             for i in filled_cells:
-                self.matrix[i[0]][i[1]] = CELL_FULL
+                try:
+                    self.matrix[i[0]][i[1]] = CELL_FULL
+                except IndexError as e:
+                    print('ERROR: x {} y {} n {} m {}'.format(i[0], i[1], self.n, self.m))
 
         self.max_axis_length = max(self.n, self.m)
 
@@ -75,6 +88,18 @@ class Piece:
                         ))
 
         plotly.offline.plot(fig, filename=location, auto_open=False)
+
+    def serialize(self):
+        original_piece_name = self.plotly_filename.replace('.html', '')
+
+        json_data = {
+            'name': original_piece_name,
+            'matrix': self.matrix
+        }
+
+        json_filename = r'{}\{}.json'.format(self.serialize_folder, original_piece_name)
+        with open(json_filename, 'w') as json_file:
+            json.dump(json_data, json_file)
 
 
 Random_Pieces = [
@@ -133,5 +158,91 @@ CommonPieces = {
             (5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5),
             (1, 5), (2, 5), (3, 5), (4, 5), (5, 5)
         ],
-        name='66_border')
+        name='66_border'),
+
+    '77_full': Piece(
+        (7, 7),
+        fill_all=True,
+        name='77_full'),
+
+    '77_as_55': Piece(
+        (7, 7),
+        [
+            (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+            (2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
+            (3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
+            (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+            (5, 1), (5, 2), (5, 3), (5, 4), (5, 5)
+        ],
+        name='77_as_55'),
+
+    '77_as_33': Piece(
+        (7, 7),
+        [
+            (2, 2), (2, 3), (2, 4),
+            (3, 2), (3, 3), (3, 4),
+            (4, 2), (4, 3), (4, 4),
+        ],
+        name='77_as_33'),
+
+    '77_as_11': Piece(
+        (7, 7),
+        [
+           (3, 3)
+        ],
+        name='77_as_11'),
+
+    '77_double_border': Piece(  # yes, there are some duplicates
+        (7, 7),
+        [
+            (0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6),
+            (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0),
+
+            (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6),
+            (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1),
+
+            (5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6),
+            (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (6, 5),
+
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
+            (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6)
+        ],
+        name='77_double_border'),
+
+    '77_border_without_middle': Piece(
+        (7, 7),
+        [
+            (0, 0), (0, 1), (0, 5), (0, 6),
+            (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
+            (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6)
+        ],
+        name='77_border_without_middle'),
+
+    '77_border': Piece(
+        (7, 7),
+        [
+            (0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6),
+            (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
+            (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6)
+        ],
+        name='77_border'),
+
+    '77_as_66_double_border': Piece(  # yes, there are some duplicates
+        (7, 7),
+        [
+            (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+            (2, 1), (3, 1), (4, 1), (5, 1),
+
+            (2, 1), (2, 2), (2, 3), (1, 4), (2, 5),
+            (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
+
+            (4, 1), (4, 2), (4, 3), (4, 4),
+            (1, 4), (2, 4), (3, 4), (4, 4),
+
+            (5, 1), (5, 2), (5, 3), (5, 4), (5, 5),
+            (2, 5), (3, 5), (4, 5), (5, 5)
+        ],
+        name='77_as_66_double_border'),
 }

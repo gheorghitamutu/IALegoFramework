@@ -7,53 +7,61 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row row-cols-1 row-cols-md-1">
+    <div class="row row-cols-4 row-cols-md-1">
         <div class="col mb-4">
+
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Lego Framework</h5>
                     <p class="card-text">Artificial Intelligence Final Project</p>
                 </div>
             </div>
+
             <br>
-            <div class="row row-cols-1 row-cols-md-2">
+
                 <div class="col mb-4">
+            <div class="row row-cols-1 row-cols-md-2">
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Configuration</h5>
-                            <p class="card-text">See all Configurations available.</p>
-                            <a href="{{ url_for('configurations') }}" class="btn btn-primary">Go see them</a>
+                            <p class="card-text">Configurations available.</p>
+                            <a href="{{ url_for('configurations') }}" class="btn btn-info btn-block">Go</a>
                         </div>
                     </div>
-                </div>
-                <div class="col mb-4">
+
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Piece</h5>
-                            <p class="card-text">See all Pieces available.</p>
-                            <a href="{{ url_for('pieces') }}" class="btn btn-primary">Go see them</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Configuration Edit</h5>
-                            <p class="card-text">Add or Remove any Configuration</p>
-                            <a href="#" class="btn btn-primary">Go edit them</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Piece Edit</h5>
-                            <p class="card-text">Add or Remove any Piece.</p>
-                            <a href="#" class="btn btn-primary">Go edit them</a>
+                            <p class="card-text">Pieces available.</p>
+                            <a href="{{ url_for('pieces') }}" class="btn btn-info btn-block">Go</a>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Custom Configuration</h5>
+                    <p class="card-text">
+                        Are there the pieces required for your Configuration?
+                        Check it below.
+                    </p>
+                    <a href="#" class="btn btn-info btn-block">Go</a>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Additional Information</h5>
+                    <p class="card-text">
+                        You're able to see (using plotly), add or remove (non-default structures only) all the available pieces and configurations.
+                        In addition, you can check if the framework contains all the pieces required for a custom configuration.
+                    </p>
+                </div>
+            </div>
+
         </div>
     </div>
 {% endblock %}

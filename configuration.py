@@ -4,6 +4,7 @@ import plotly
 import os
 import time
 import uuid
+import json
 
 
 class Configuration:
@@ -14,7 +15,16 @@ class Configuration:
     except OSError:
         print("Creation of the directory {} failed!".format(plotly_directory_configurations))
 
+    serialize_folder = r'{}\user_made'.format(plotly_directory_configurations)
+    try:
+        if os.path.exists(serialize_folder) is False:
+            os.mkdir(serialize_folder)
+    except OSError:
+        print("Creation of the directory {} failed!".format(serialize_folder))
+
     def __init__(self, pieces, name=None):
+        self.user_made = False
+
         self.pieces = pieces
         self.max_axis_length = max([piece.max_axis_length for piece in self.pieces])
 
@@ -60,6 +70,18 @@ class Configuration:
 
         plotly.offline.plot(fig, filename=location, auto_open=False)
 
+    def serialize(self):
+        original_configuration_name = self.plotly_filename.replace('.html', '')
+
+        json_data = {
+            'name': original_configuration_name,
+            'pieces': [piece.plotly_filename.replace('.html', '') for piece in self.pieces]
+        }
+
+        json_filename = r'{}\{}.json'.format(self.serialize_folder, original_configuration_name)
+        with open(json_filename, 'w') as json_file:
+            json.dump(json_data, json_file)
+
 
 CommonConfigurations = {
     'pyramid': Configuration(
@@ -80,5 +102,35 @@ CommonConfigurations = {
             CommonPieces['66_border']
         ],
         name='3_sided_cube'
+    ),
+
+    'sphere': Configuration(
+        pieces=[
+            CommonPieces['77_as_11'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_55'],
+            CommonPieces['77_full'],
+            CommonPieces['77_as_55'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_11']
+        ],
+        name='sphere'
+    ),
+
+    'home': Configuration(
+        pieces=[
+            CommonPieces['77_full'],
+            CommonPieces['77_border_without_middle'],
+            CommonPieces['77_border_without_middle'],
+            CommonPieces['77_border_without_middle'],
+            CommonPieces['77_border_without_middle'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_double_border'],
+            CommonPieces['77_as_66_double_border'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_11']
+        ],
+        name='home'
     )
 }

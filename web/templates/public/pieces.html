@@ -9,21 +9,77 @@
 {% block content %}
 
 <div class="row row-cols-1 row-cols-md-1">
+
     <div class="col mb-4">
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title">Pieces List</h5>
-                <p class="card-text">All Pieces available.</p>
+                <p class="card-text">All Pieces available</p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="card-body">
+                    <p class="card-text">Add new Piece</p>
+                    <a href="{{ 'add\\pieces'}}" class="btn btn-info btn-block">Add</a>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="col mb-4">
-        <div id="list-example" class="list-group text-center">
-            {% for piece in pieces %}
-                <a class="list-group-item list-group-item-action" href="{{ 'pieces\\' + piece }}">{{ piece }}</a>
-            {% endfor %}
+        {% for piece in pieces %}
+        <div class="card mb-2">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <p class="card-text">{{ piece }}</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'pieces\\' + piece }}" class="btn btn-info btn-block">See</a>
+                </div>
+
+                <div class="card-body">
+                    <a href="#" class="btn btn-danger btn-block disabled">Remove</a>
+                </div>
+
+            </div>
+
         </div>
+        {% endfor %}
+
+        {% for piece in user_made_pieces %}
+        <div class="card mb-2">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <p class="card-text">{{ piece }}</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'pieces\\' + piece }}" class="btn btn-info btn-block">See</a>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'remove\\pieces\\' + piece }}" class="btn btn-danger btn-block">Remove</a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
     </div>
+
 </div>
 
 {% endblock %}
