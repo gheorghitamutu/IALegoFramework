@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ super() }}
+{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row row-cols-1 row-cols-md-1">
+  <div class="col mb-4">
+
+      <div class="card text-center">
+          <div class="card-body">
+              <h5 class="card-title">Add Configuration</h5>
+              <p class="card-text">Select name, size and pieces used for your Configuration</p>
+          </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card text-center">
+                  <div class="card-body">
+                      <p class="card-text">Possible pieces to pick from.</p>
+                          <div class="row">
+                          {% for piece in pieces %}
+
+                          <a href="{{ '\\pieces\\' + piece }}" target="_blank" type="button" class="btn btn-outline-info btn_pad">
+                              {{ piece }}
+                          </a>
+
+                          {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

@@ -16,13 +16,67 @@
                 <p class="card-text">All Configurations available.</p>
             </div>
         </div>
-    </div>
-    <div class="col mb-4">
-        <div id="list-example" class="list-group text-center">
-            {% for configuration in configurations %}
-                <a class="list-group-item list-group-item-action" href="{{ 'configurations\\' + configuration }}">{{ configuration }}</a>
-            {% endfor %}
+
+        <br>
+
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="card-body">
+                    <p class="card-text">Add new Configuration</p>
+                    <a href="{{ 'add\\configurations'}}" class="btn btn-info btn-block">Add</a>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="col mb-4">
+        {% for configuration in configurations %}
+        <div class="card mb-2">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <p class="card-text">{{ configuration }}</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'configurations\\' + configuration }}" class="btn btn-info btn-block">See</a>
+                </div>
+
+                <div class="card-body">
+                    <a href="#" class="btn btn-danger btn-block disabled">Remove</a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+        {% for configuration in user_made_configurations %}
+        <div class="card mb-2">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <p class="card-text">{{ configuration }}</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'configurations\\' + configuration }}" class="btn btn-info btn-block">See</a>
+                </div>
+
+                <div class="card-body">
+                    <a href="{{ 'remove\\configurations\\' + configuration }}" class="btn btn-danger btn-block">Remove</a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
     </div>
 </div>
 

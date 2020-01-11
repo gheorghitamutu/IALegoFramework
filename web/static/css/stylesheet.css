@@ -14,3 +14,8 @@ body {
 .cell_selected {
     background-color: #ffc107;
 }
+
+.btn_pad {
+    padding: 10px;
+    margin: 1em;
+}

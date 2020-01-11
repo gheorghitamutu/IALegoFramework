@@ -20,7 +20,7 @@ function draw_cells() {
 
         for (j = 0; j < columns; j++) {
 
-            var current_cell = i * rows + j;
+            var current_cell = i * columns + j;
 
             inner_columns += `
             <div class="col">
@@ -52,9 +52,7 @@ function toggleCell(cell, current_cell) {
     console.log(selected_cells)
 }
 
-document.addEventListener('DOMContentLoaded', xx, false);
-
-function xx () {
+function setup_listeners () {
     console.log(document.URL);
 
     draw_cells();
@@ -68,24 +66,27 @@ function xx () {
     piece_width.addEventListener('input', inputHandler);
     piece_form.addEventListener('submit', newFormData);
 
-    document.querySelector('#add_piece_button').addEventListener('click', addPiece);
+    document.querySelector('#add_piece_button').addEventListener('click', submitAddPiece);
 
     function inputHandler(e) {
         console.log(e.target.value);
         console.log(e.target.id);
 
-        if (e.target.value > 11) {
-            e.target.value = 11;
+        upper_limit = 16
+        lower_limit = 1
+
+        if (e.target.value > upper_limit) {
+            e.target.value = upper_limit;
         }
 
-        if (e.target.value < 1) {
-            e.target.value = 1;
+        if (e.target.value < lower_limit) {
+            e.target.value = lower_limit;
         }
 
          draw_cells();
     }
 
-    function addPiece(e) {
+    function submitAddPiece(e) {
         console.log('addPiece() called!');
 
         if (parseInt(piece_height.value) == 0) {
@@ -124,7 +125,6 @@ function xx () {
 
         e.preventDefault();
 
-        // Get the form data from the event object
         let data = e.formData;
 
         data.append('height', parseInt(piece_height.value));
@@ -136,7 +136,8 @@ function xx () {
             console.log(value);
         }
     });
-
 }
+
+document.addEventListener('DOMContentLoaded', setup_listeners, false);
 
 

@@ -11,29 +11,38 @@ CELL_FULL = 1
 
 
 class Piece:
-    plotly_directory_pieces = r'web\templates\public\resources\pieces'
-    try:
-        if os.path.exists(plotly_directory_pieces) is False:
-            os.mkdir(plotly_directory_pieces)
-    except OSError:
-        print("Creation of the directory {} failed!".format(plotly_directory_pieces))
-
-    serialize_folder = r'{}\user_made'.format(plotly_directory_pieces)
-    try:
-        if os.path.exists(serialize_folder) is False:
-            os.mkdir(serialize_folder)
-    except OSError:
-        print("Creation of the directory {} failed!".format(serialize_folder))
-
-    def __init__(self, size, filled_cells=None, fill_all=False, name=None, user_made=False):
+    def __init__(self, size, filled_cells=None, fill_all=False, name=None, user_made=False, matrix=None):
         self.user_made = user_made
 
-        self.n = size[0]
-        self.m = size[1]
-        self.matrix = [[CELL_FULL if fill_all else CELL_EMPTY] * self.n for _ in range(self.m)]
+        if matrix is None:
+            self.n = size[0]
+            self.m = size[1]
+            self.matrix = [[CELL_FULL if fill_all else CELL_EMPTY] * self.m for _ in range(self.n)]
+        else:
+            self.n = len(matrix)
+            self.m = len(matrix[0])
+            self.matrix = matrix
+
         self.cube = Cube()
 
         self.id = uuid.uuid4()
+
+        self.plotly_directory_pieces = r'web\templates\public\resources\pieces'
+        try:
+            if os.path.exists(self.plotly_directory_pieces) is False:
+                os.mkdir(self.plotly_directory_pieces)
+        except OSError:
+            print("Creation of the directory {} failed!".format(self.plotly_directory_pieces))
+
+        self.serialize_folder = r'{}\user_made'.format(self.plotly_directory_pieces)
+        try:
+            if os.path.exists(self.serialize_folder) is False:
+                os.mkdir(self.serialize_folder)
+        except OSError:
+            print("Creation of the directory {} failed!".format(self.serialize_folder))
+
+        if user_made is True:
+            self.plotly_directory_pieces = '{}\\user_made'.format(self.plotly_directory_pieces)
 
         if name is None:
             self.plotly_directory_pieces = r'{}\{}'.format(self.plotly_directory_pieces, time.time())
@@ -44,7 +53,10 @@ class Piece:
         if fill_all is False and filled_cells is not None:
             for i in filled_cells:
                 try:
-                    self.matrix[i[0]][i[1]] = CELL_FULL
+                    x = i[0]
+                    y = i[1]
+
+                    self.matrix[x][y] = CELL_FULL
                 except IndexError as e:
                     print('ERROR: x {} y {} n {} m {}'.format(i[0], i[1], self.n, self.m))
 
@@ -60,32 +72,25 @@ class Piece:
         fig = go.Figure()
         location = os.path.join(self.plotly_directory_pieces, self.plotly_filename)
 
-        for xx in range(self.max_axis_length):
-            for yy in range(self.max_axis_length):
-                for zz in range(self.max_axis_length):
+        print('PLOTLY')
+        print(self.matrix)
 
-                    if xx < self.n and yy < self.m and zz == 0:
-                        if self.matrix[yy][xx] == CELL_FULL:
+        for xx in range(self.n):
+            for yy in range(self.m):
+                if xx < self.n and yy < self.m:
+                    try:
+                        if self.matrix[xx][yy] == CELL_FULL:
                             fig.add_trace(go.Mesh3d(
                                 x=self.cube.x + xx,
                                 y=self.cube.y + yy,
-                                z=self.cube.z + zz,
+                                z=self.cube.z,  # + zz,
                                 i=self.cube.i,
                                 j=self.cube.j,
                                 k=self.cube.k,
                                 name='cube'
                             ))
-                    else:
-                        fig.add_trace(go.Mesh3d(
-                            x=self.cube.x + xx,
-                            y=self.cube.y + yy,
-                            z=self.cube.z + zz,
-                            i=self.cube.i,
-                            j=self.cube.j,
-                            k=self.cube.k,
-                            name='cube_transparent',
-                            opacity=0
-                        ))
+                    except IndexError as e:
+                        print('ERROR xx yy: x {} y {} n {} m {}'.format(xx, yy, self.n, self.m))
 
         plotly.offline.plot(fig, filename=location, auto_open=False)
 
@@ -188,7 +193,7 @@ CommonPieces = {
     '77_as_11': Piece(
         (7, 7),
         [
-           (3, 3)
+            (3, 3)
         ],
         name='77_as_11'),
 
