@@ -1,11 +1,11 @@
 from flask import Flask, Blueprint, redirect, url_for
 from flask import render_template
-import os
-from configuration import CommonConfigurations
-from piece import CommonPieces, Piece
 from threading import Thread
 from flask import request
 import json
+import os
+from configuration import CommonConfigurations, Configuration
+from piece import CommonPieces, Piece
 
 configurations_bp = Blueprint(
     'configurations',
@@ -25,6 +25,11 @@ user_made_pieces_bp = Blueprint(
     static_folder='static',
     template_folder=os.path.join('web', 'templates', 'public', 'resources', 'pieces', 'user_made'))
 
+user_made_configurations_bp = Blueprint(
+    'user_made_configurations',
+    __name__,
+    static_folder='static',
+    template_folder=os.path.join('web', 'templates', 'public', 'resources', 'configurations', 'user_made'))
 
 app = Flask(__name__,
             static_url_path='',
@@ -144,15 +149,63 @@ def add_configurations():
     return render_template('add_configuration.html', pieces=all_pieces_available)
 
 
+@app.route('/add/configuration', methods=['POST'])
+def add_configuration():
+    print(request.form)
+
+    user_made = True
+    name = request.form['name']
+    pieces_names = request.form['selected_pieces'].split(',')
+    height = request.form['height']  # not relevant
+
+    configuration = Configuration(name=name, pieces=None, user_made=user_made, pieces_names=pieces_names)
+    configuration.serialize()
+    Thread(target=configuration.output_piece_plotly()).start()  # drawing the SVG using plotly takes a lot
+
+    return redirect(url_for('configurations'))
+
+
+@app.route('/remove/configurations/<path:path>')
+def remove_user_made_configurations_files(path):
+    files_to_delete = list()
+    files_to_delete.append(
+        '{}\\{}\\resources\\configurations\\user_made\\{}.html'.format(app.root_path, app.template_folder, path))
+    files_to_delete.append(
+        '{}\\{}\\resources\\configurations\\user_made\\{}.json'.format(app.root_path, app.template_folder, path))
+
+    try_delete(files_to_delete)
+
+    return redirect(url_for('configurations'))
+
+
+@user_made_configurations_bp.route('/configurations/user_made/<path:path>')
+def render_user_configuration_file(path):
+    configuration_template_name = os.path.join('{}.html'.format(path))
+    return render_template(configuration_template_name)
+
+
 def init_components():
-    # make sure default CommonConfiguration are built
+    # make sure that all configurations are built
     for name, configuration in CommonConfigurations.items():
         configuration.output_piece_plotly()
         print('Created file for configuration {}.'.format(configuration.plotly_filename))
-        configuration.serialize()
-        print('Serialized configuration {}.'.format(configuration.plotly_filename))
+
+    user_made_configuration_folder = '{}\\{}\\resources\\configurations\\user_made'.format(
+        app.root_path, app.template_folder)
+    json_files = get_file_names_only(user_made_configuration_folder)
+    for filename in json_files:
+        full_path = '{}.json'.format(os.path.join(user_made_configuration_folder, filename))
+        with open(full_path) as f:
+            data = json.load(f)
+            user_made = True
+            name = data['name']
+            pieces_names = data['pieces']
+
+            configuration = Configuration(name=name, pieces=None, user_made=user_made, pieces_names=pieces_names)
+            configuration.output_piece_plotly()
+
 #
-    # make sure default CommonPieces are built
+    # make sure that all pieces are built
     for name, piece in CommonPieces.items():
         piece.output_piece_plotly()
         print('Created file for piece {}.'.format(piece.plotly_filename))
@@ -180,4 +233,5 @@ if __name__ == '__main__':
     app.register_blueprint(pieces_bp)
     app.register_blueprint(configurations_bp)
     app.register_blueprint(user_made_pieces_bp)
+    app.register_blueprint(user_made_configurations_bp)
     app.run(debug=True)

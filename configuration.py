@@ -1,10 +1,11 @@
-from piece import CommonPieces, CELL_FULL
+from piece import CommonPieces, CELL_FULL, Piece
 import plotly.graph_objects as go
 import plotly
 import os
 import time
 import uuid
 import json
+import random
 
 
 class Configuration:
@@ -22,10 +23,37 @@ class Configuration:
     except OSError:
         print("Creation of the directory {} failed!".format(serialize_folder))
 
-    def __init__(self, pieces, name=None):
-        self.user_made = False
+    def __init__(self, pieces=None, name=None, pieces_names=None, user_made=False):
+        self.user_made = user_made
 
-        self.pieces = pieces
+        self.pieces = list()
+        if pieces_names is None:
+            self.pieces = pieces
+        else:
+            for piece_name in pieces_names:
+
+                if piece_name in CommonPieces:
+                    self.pieces.append(CommonPieces[piece_name])
+                else:
+                    user_made_piece_path = r'web\templates\public\resources\pieces\user_made'
+                    if os.path.exists(r'{}\{}\{}.json'.format(
+                            os.path.dirname(__file__), user_made_piece_path, piece_name)):
+                        piece_path = '{}.json'.format(user_made_piece_path)
+                    else:
+                        raise Exception('Unable to find piece {}!'.format(piece_name))
+
+                    full_path = '{}.json'.format(os.path.join(piece_path, piece_name))
+                    with open(full_path) as f:
+                        data = json.load(f)
+                        size = None
+                        matrix = data['matrix']
+                        user_made = True
+                        name = data['name']
+
+                        piece = Piece(
+                            size=size, filled_cells=None, fill_all=False, name=name, user_made=user_made, matrix=matrix)
+                        self.pieces.append(piece)
+
         self.max_axis_length = max([piece.max_axis_length for piece in self.pieces])
 
         self.id = uuid.uuid4()
@@ -40,9 +68,17 @@ class Configuration:
 
     def output_piece_plotly(self):
         fig = go.Figure()
-        location = os.path.join(self.plotly_directory_configurations, self.plotly_filename)
+
+        if self.user_made:
+            location = os.path.join(self.plotly_directory_configurations, 'user_made', self.plotly_filename)
+        else:
+            location = os.path.join(self.plotly_directory_configurations, self.plotly_filename)
 
         for i, piece in enumerate(self.pieces):
+
+            color_index = random.randint(0, len(plotly.colors.DEFAULT_PLOTLY_COLORS) - 1)
+            color = plotly.colors.DEFAULT_PLOTLY_COLORS[color_index]
+
             for xx in range(self.max_axis_length):
                 for yy in range(self.max_axis_length):
                     if xx < piece.n and yy < piece.m:
@@ -54,7 +90,8 @@ class Configuration:
                                 i=piece.cube.i,
                                 j=piece.cube.j,
                                 k=piece.cube.k,
-                                name='cube'
+                                name='cube',
+                                color=color
                             ))
                     else:
                         fig.add_trace(go.Mesh3d(

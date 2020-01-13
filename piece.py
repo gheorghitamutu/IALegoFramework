@@ -5,6 +5,7 @@ import uuid
 import time
 from cube import Cube
 import json
+import random
 
 CELL_EMPTY = 0
 CELL_FULL = 1
@@ -72,8 +73,8 @@ class Piece:
         fig = go.Figure()
         location = os.path.join(self.plotly_directory_pieces, self.plotly_filename)
 
-        print('PLOTLY')
-        print(self.matrix)
+        color_index = random.randint(0, len(plotly.colors.DEFAULT_PLOTLY_COLORS) - 1)
+        color = plotly.colors.DEFAULT_PLOTLY_COLORS[color_index]
 
         for xx in range(self.n):
             for yy in range(self.m):
@@ -87,8 +88,21 @@ class Piece:
                                 i=self.cube.i,
                                 j=self.cube.j,
                                 k=self.cube.k,
-                                name='cube'
+                                name='cube',
+                                color=color
                             ))
+
+                        # fix the issue for one layer spanning too wide adding another transparent layer
+                        fig.add_trace(go.Mesh3d(
+                            x=self.cube.x + xx,
+                            y=self.cube.y + yy,
+                            z=self.cube.z + 1,  # + zz,
+                            i=self.cube.i,
+                            j=self.cube.j,
+                            k=self.cube.k,
+                            name='cube',
+                            opacity=0
+                        ))
                     except IndexError as e:
                         print('ERROR xx yy: x {} y {} n {} m {}'.format(xx, yy, self.n, self.m))
 

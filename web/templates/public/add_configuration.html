@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}
-    {{ super() }}
+     {{ super() }}
 {% endblock %}
 {% block head %}
-  {{ super() }}
+     <script src="{{ url_for('static', filename='js/configuration.js') }}"></script>
+     {{ super() }}
 {% endblock %}
 
 {% block content %}
@@ -25,20 +26,60 @@
               <div class="card text-center">
                   <div class="card-body">
                       <p class="card-text">Possible pieces to pick from.</p>
-                          <div class="row">
-                          {% for piece in pieces %}
-
-                          <a href="{{ '\\pieces\\' + piece }}" target="_blank" type="button" class="btn btn-outline-info btn_pad">
-                              {{ piece }}
-                          </a>
-
-                          {% endfor %}
-                          </div>
+                      <div class="row">
+                      {% for piece in pieces %}
+                      <a href="{{ '\\pieces\\' + piece }}" target="_blank" type="button" class="btn btn-outline-secondary btn_pad possible_piece">
+                          {{ piece }}
+                      </a>
+                      {% endfor %}
                       </div>
                   </div>
               </div>
           </div>
       </div>
+
+      <br>
+
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card text-center">
+                  <div class="card-body">
+                          <div class="form-group row">
+                              <label for="configuration-height-input" class="col-4 col-form-label">Height</label>
+                              <div class="col-4">
+                                  <input class="form-control" type="number" value="0" id="configuration-height-input">
+                              </div>
+                          </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card text-center">
+                  <div class="card-body" id="pieces_picker">
+                      <p> Pick the required pieces here. Options will appear after you set up the height of the configuration.</p>
+                      <!-- JS content here -->
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <br>
+
+      <div class="input-group">
+          <input type="text" class="form-control" placeholder="Configuration's name" aria-label="Configuration's name" aria-describedby="basic-addon2" id="configuration-name">
+              <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="button" id="add_configuration_button">Add</button>
+              </div>
+      </div>
+
+      <form action="{{ url_for('add_configuration') }}" method="post" id="add_configuration_form">
+          <!-- dummy form used for submit only -->
+      </form>
 
   </div>
 
