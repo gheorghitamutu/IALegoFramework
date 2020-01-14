@@ -1,8 +1,6 @@
-from flask import Flask, Blueprint, redirect, url_for
-from flask import render_template
+from flask import Flask, Blueprint, redirect, url_for, render_template, request, json, jsonify
+from werkzeug.utils import secure_filename
 from threading import Thread
-from flask import request
-import json
 import os
 from configuration import CommonConfigurations, Configuration
 from piece import CommonPieces, Piece
@@ -178,10 +176,78 @@ def remove_user_made_configurations_files(path):
     return redirect(url_for('configurations'))
 
 
+@app.route('/custom_configuration')
+def custom_configuration():
+    return render_template('custom_configuration.html')
+
+
 @user_made_configurations_bp.route('/configurations/user_made/<path:path>')
 def render_user_configuration_file(path):
     configuration_template_name = os.path.join('{}.html'.format(path))
     return render_template(configuration_template_name)
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['json']
+
+
+@app.route('/custom_configuration/upload_result', methods=['POST'])
+def configuration_upload():
+    data = dict()
+    file_path = ''
+
+    file = request.files['upload_file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        data = {'success': False,
+                'supported': False,
+                'message': 'No selected file!'}
+    elif file and allowed_file(file.filename):  # json only
+        filename = secure_filename(file.filename)
+
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+    else:
+        data = {'success': False,
+                'supported': False,
+                'message': 'File type not allowed!'}
+
+    supported = True
+
+    if file_path != '':
+        with open(file_path, 'r') as f:
+            json_object = json.load(f)
+
+            if 'matrix-3d' in json_object:
+                matrix_3d = json_object['matrix-3d']
+
+                for matrix in matrix_3d:
+                    matrix_supported = False
+
+                    for name, piece in CommonPieces.items():
+                        if matrix == piece.matrix:
+                            matrix_supported = True
+                            break
+
+                    if not matrix_supported:
+
+                        """
+                            TODO: check user made pieces?
+                        """
+
+                        supported = False
+                        break
+            else:
+                supported = False
+    else:
+        supported = False
+
+    if len(data) == 0:
+        data = {'success': True,
+                'supported': supported,
+                'message': ''}
+    return jsonify(data)
 
 
 def init_components():
@@ -204,7 +270,6 @@ def init_components():
             configuration = Configuration(name=name, pieces=None, user_made=user_made, pieces_names=pieces_names)
             configuration.output_piece_plotly()
 
-#
     # make sure that all pieces are built
     for name, piece in CommonPieces.items():
         piece.output_piece_plotly()
@@ -229,6 +294,9 @@ def init_components():
 if __name__ == '__main__':
     thread = Thread(target=init_components)
     thread.start()
+
+    app.config['UPLOAD_FOLDER'] = os.path.join('web', 'uploads')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16  -> raises RequestEntityTooLarge exception
 
     app.register_blueprint(pieces_bp)
     app.register_blueprint(configurations_bp)
