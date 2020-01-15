@@ -1,0 +1,8 @@
+site_name: IALegoFramework Docs
+theme:
+    name: mkdocs
+    highlightjs: true
+    hljs_languages:
+        - python
+        - javascript
+    nav_style: dark
