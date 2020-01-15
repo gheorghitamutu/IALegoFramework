@@ -169,5 +169,61 @@ CommonConfigurations = {
             CommonPieces['77_as_11']
         ],
         name='home'
-    )
+    ),
+    
+    'LShape': Configuration(
+        pieces=[
+            CommonPieces['55_full'],
+            CommonPieces['55_half_border'],
+            CommonPieces['55_half_border'],
+            CommonPieces['55_half_border'],
+            CommonPieces['55_half_border'],
+            CommonPieces['55_half_border'],
+        ],
+        name='LShape'
+    ),
+
+ 
+
+    'tower': Configuration(
+        pieces=[
+            CommonPieces['55_full'],
+            CommonPieces['55_middle'],
+            CommonPieces['55_middle'],
+            CommonPieces['55_middle'],
+            CommonPieces['55_middle'],
+            CommonPieces['55_middle'],
+        ],
+        name='tower'
+    ),
+
+    'skyscraper': Configuration(
+        pieces=[
+            CommonPieces['88_full'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+            CommonPieces['88_middle'],
+        ],
+        name='skyscraper'
+    ),
+
+    'chinesewall': Configuration(
+        pieces=[
+            CommonPieces['88_full'],
+            CommonPieces['88_upper_border'],
+            CommonPieces['88_upper_border'],
+            CommonPieces['88_upper_border'],
+            CommonPieces['88_upper_border'],
+        ],
+        name='chinesewall'
+    ),
+    
+    
 }
