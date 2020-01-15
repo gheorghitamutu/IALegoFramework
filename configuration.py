@@ -225,5 +225,66 @@ CommonConfigurations = {
         name='chinesewall'
     ),
     
+    'iceskates': Configuration(
+        pieces=[
+            CommonPieces['55_full'],
+            CommonPieces['55_L_shape'],
+            CommonPieces['55_L_shape'],
+            CommonPieces['55_L_shape'],
+        ],
+        name='iceskates'
+    ),
+
+    'defensewalls': Configuration(
+        pieces=[
+            CommonPieces['77_full'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+        ],
+        name='defensewalls'
+    ),
+
+    'fortress': Configuration(
+        pieces=[
+            CommonPieces['77_full'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_33'],
+            CommonPieces['77_as_33'],
+
+        ],
+        name='fortress'
+    ),
+
+
+    'colosseum': Configuration(
+        pieces=[
+            CommonPieces['88_full'],
+            CommonPieces['88_border'],
+            CommonPieces['88_border'],
+            CommonPieces['88_border'],
+            CommonPieces['88_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['77_border'],
+            CommonPieces['66_border'],
+            CommonPieces['66_border'],
+            CommonPieces['66_border'],
+            CommonPieces['55_border'],
+            CommonPieces['55_border'],
+            CommonPieces['44_border'],
+        ],
+        name='colosseum'
+    )
     
 }
