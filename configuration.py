@@ -255,6 +255,7 @@ CommonConfigurations = {
             CommonPieces['77_border'],
             CommonPieces['77_border'],
             CommonPieces['77_border'],
+            CommonPieces['77_full'],
             CommonPieces['77_as_33'],
             CommonPieces['77_as_33'],
             CommonPieces['77_as_33'],
