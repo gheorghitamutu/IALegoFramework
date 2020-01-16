@@ -265,7 +265,6 @@ CommonConfigurations = {
         name='fortress'
     ),
 
-
     'colosseum': Configuration(
         pieces=[
             CommonPieces['88_full'],
@@ -285,6 +284,28 @@ CommonConfigurations = {
             CommonPieces['44_border'],
         ],
         name='colosseum'
+    ),
+
+    'stairs': Configuration(
+        pieces=[
+            CommonPieces['44_full'],
+            CommonPieces['44_first3'],
+            CommonPieces['44_first2'],
+            CommonPieces['44_first1']
+        ],
+        name='stairs'
+    ),
+
+    'big_cube': Configuration(
+        pieces=[
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+            CommonPieces['77_full'],
+        ],
+        name='big_cube'
     )
-    
 }
